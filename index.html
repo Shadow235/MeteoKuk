@@ -18,34 +18,59 @@
 </head>
 <body>
 
-    <div class="graf-container">
-        <h2>Můj první graf</h2>
-        <!-- 2. Element Canvas, kam se graf vykreslí -->
-        <canvas id="mujGraf"></canvas>
+ <div style="width: 800px; margin: 50px auto;">
+        <canvas id="lineGraf"></canvas>
     </div>
 
-    <!-- 3. Skript pro nastavení a vykreslení dat -->
     <script>
-        // Najdeme element canvas
-        const ctx = document.getElementById('mujGraf');
+        // Nutná registrace pluginu, aby fungoval
+        Chart.register(ChartDataLabels);
 
-        // Vytvoříme nový graf
+        const ctx = document.getElementById('lineGraf');
+
         new Chart(ctx, {
-            type: 'bar', // Typ grafu: 'bar', 'line', 'pie', 'doughnut', atd.
+            type: 'line', // Změna na Čárový graf
             data: {
-                labels: ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen'],
+                labels: ['Leden', 'Únor', 'Březen', 'Duben', 'Květen'],
                 datasets: [{
-                    label: 'Prodeje v kč',
-                    data: [12000, 19000, 3000, 5000, 2000, 30000],
-                    borderWidth: 1,
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)', // Barva sloupců
-                    borderColor: 'rgba(54, 162, 235, 1)' // Barva ohraničení
+                    label: 'Návštěvnost',
+                    data: [150, 230, 180, 320, 290],
+                    
+                    // --- STYL ČÁRY A BODŮ ---
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    tension: 0.3,          // 0 = rovné čáry, 0.3 = hezky zaoblené
+                    
+                    // Nastavení stylu bodů
+                    pointStyle: 'circle',  // 'circle', 'rect', 'triangle', 'star'...
+                    pointRadius: 8,        // Velikost bodu
+                    pointHoverRadius: 10,  // Velikost po najetí myší
+                    pointBackgroundColor: 'white', // Výplň bodu
+                    pointBorderColor: 'rgb(75, 192, 192)', // Okraj bodu
+                    pointBorderWidth: 2
                 }]
             },
             options: {
+                plugins: {
+                    // --- NASTAVENÍ POPISKŮ (DataLabels) ---
+                    datalabels: {
+                        color: 'black',        // Barva textu
+                        align: 'top',          // Umístění vůči bodu (top, bottom, center...)
+                        anchor: 'end',         // Kotva (kde u bodu text začíná)
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        formatter: function(value) {
+                            return value + ' ks'; // Můžete přidat text za číslo
+                        }
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true // Osa Y začíná od nuly
+                        beginAtZero: true,
+                        // Aby se popisky nahoře neuřízly, přidáme trochu místa nad grafem
+                        suggestedMax: 400 
                     }
                 }
             }
